@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: slam_april_laser_odom
+Description: Description of slam_april_laser_odom
+Version: 0.0.0
+Cflags: -I/usr/local/include -I/usr/include/eigen3
+Libs: -L/usr/local/lib 
+Requires: serial std_msgs geometry_msgs ethz_apriltag2 image_transport roscpp sensor_msgs nav_msgs tf cv_bridge message_runtime nodelet

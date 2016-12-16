@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/wxf/catkin_ws/src/slam_april_laser_odom/build/devel/setup.sh
