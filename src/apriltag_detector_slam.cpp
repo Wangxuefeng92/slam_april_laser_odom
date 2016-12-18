@@ -157,17 +157,25 @@ void AprilTagDetector::imageCb(const sensor_msgs::ImageConstPtr& msg){
     double _yew_camera,_pich_camera,_roll_camera;
     tag2robot.getBasis().getEulerZYX(_yew_robot,_pich_robot,_roll_robot);
     _yew_robot=_yew_robot+M_PI/2;
+    if(_yew_robot>M_PI)
+    {
+        _yew_robot-=2*M_PI;
+    }
+    else if(_yew_robot<-M_PI)
+    {
+        _yew_robot+=2*M_PI;
+    }
     tf::Quaternion qq=tf::createQuaternionFromRPY(_roll_robot,_pich_robot,_yew_robot);
     tag2robot.setRotation(qq);
     tag2camera_tf.getBasis().getEulerZYX(_yew_camera,_pich_camera,_roll_camera);
-    //ROS_INFO("tag2camera_tf is(x:%.3f, y:%.3f. z:%.3f,,,,,angle:%.3f) ",tag2camera_tf.getOrigin().getX(),tag2camera_tf.getOrigin().getY(),tag2camera_tf.getOrigin().getZ(),_yew_camera*180/3.1415926);
+    ROS_INFO("tag2camera_tf is(x:%.3f, y:%.3f. z:%.3f,,,,,angle:%.3f) ",tag2camera_tf.getOrigin().getX(),tag2camera_tf.getOrigin().getY(),tag2camera_tf.getOrigin().getZ(),_yew_camera*180/3.1415926);
     ROS_INFO("tag2robot is(x:%.3f, y:%.3f. z:%.3f,,,,,angle:%.3f) ",tag2robot.getOrigin().getX(),tag2robot.getOrigin().getY(),tag2robot.getOrigin().getZ(),_yew_robot*180/3.1415926);
     //third:get the tag pose according to odom message
      tf::Pose tagPose_measure;
     tagPose_measure=turtle_odom.operator *(tag2robot);
     double _yew_world,_pich_world,_roll_world;
     tagPose_measure.getBasis().getEulerZYX( _yew_world,_pich_world,_roll_world);
-    ROS_INFO("tag2odom is(x:%.3f, y:%.3f. z:%.3f,,,,,angle:%.3f) ",tagPose_measure.getOrigin().getX(),tagPose_measure.getOrigin().getY(),tagPose_measure.getOrigin().getZ(),_yew_world*180/3.1415926);
+    //ROS_INFO("tag2odom is(x:%.3f, y:%.3f. z:%.3f,,,,,angle:%.3f) ",tagPose_measure.getOrigin().getX(),tagPose_measure.getOrigin().getY(),tagPose_measure.getOrigin().getZ(),_yew_world*180/3.1415926);
 
     geometry_msgs::PoseStamped MsgtagPose_measure;
     MsgtagPose_measure.pose.position.x=tagPose_measure.getOrigin().getX();
